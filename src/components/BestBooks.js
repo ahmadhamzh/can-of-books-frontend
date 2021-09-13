@@ -14,6 +14,7 @@ export class Bestbooks extends Component {
             showAddModal: false,
         }
     }
+
     handelAddModal = (e) => {
         e.preventDefault();
         const responseBody = {
@@ -51,6 +52,7 @@ export class Bestbooks extends Component {
         }).catch(error => alert(error.message));
 
     };
+
     render() {
         return (
             <div>
