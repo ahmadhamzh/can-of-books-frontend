@@ -12,19 +12,13 @@ export class Bestbooks extends Component {
             booksData: []
         }
     }
-
-
         componentDidMount = () => {
             axios.get(`${process.env.REACT_APP_API_URL}/books`).then((booksResponse) => {
 
                 this.setState({ booksData: booksResponse.data });
             }).catch(error => alert(error.message));
         }
-
-
-
-
-
+        
     render() {
         return (
             <div>
