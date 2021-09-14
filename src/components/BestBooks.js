@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import AddBook from './BookFormModal';
+import UpdateModel from './UpdateFormModel'
 
 export class Bestbooks extends Component {
 
@@ -12,6 +13,8 @@ export class Bestbooks extends Component {
         this.state = {
             booksData: [],
             showAddModal: false,
+            showUpdateModal: false,
+            bookSelectedData: {},
         }
     }
 
@@ -40,6 +43,49 @@ export class Bestbooks extends Component {
         }).catch(() => alert("something went wrong"));
        
     };
+
+    handelUpdateModal = (e) =>{
+        e.preventDefault();
+        const responseBody = {
+            title: e.target.bookName.value,
+            description: e.target.bookdescription.value,
+            status: e.target.bookstatus.value,
+            email: e.target.useremail.value
+        }
+
+        axios.put(`${process.env.REACT_APP_API_URL}/books/${this.state.bookSelectedData._id}`, responseBody).then(updatedBookObject =>{
+            const updatedBooksArr = this.state.booksData.map(book=>{
+                console.log(updatedBookObject.data);
+                console.log(book._id);
+                if (this.state.bookSelectedData._id === book._id) {
+
+                    book = updatedBookObject.data
+                    return book
+                    
+                }
+                return book
+            })
+            this.setState({
+                booksData:updatedBooksArr,
+                bookSelectedData: {},
+            })
+            this.handelDisplayUpateModal();
+        }).catch(() => alert('Somthing went wrong'));
+
+
+
+
+    }
+
+
+    handelDisplayUpateModal = (book) => {
+        this.setState({
+            showUpdateModal: !this.state.showUpdateModal,
+            bookSelectedData: book
+        })
+        // console.log(book);
+
+    }
 
     handelDisplayAddModal = () => {
         this.setState({ showAddModal: !this.state.showAddModal });
@@ -71,6 +117,17 @@ export class Bestbooks extends Component {
                     </>
                 }
                 {
+                    this.state.showUpdateModal &&
+                    <>
+                        <UpdateModel
+                            show={this.state.showUpdateModal}
+                            handelDisplayUpateModal={this.handelDisplayUpateModal}
+                            handelUpdateModal={this.handelUpdateModal}
+                            bookSelectedData = {this.state.bookSelectedData}
+                        />
+                    </>
+                }
+                {
                     this.state.booksData.length > 0 &&
                     <>
                         {
@@ -86,6 +143,7 @@ export class Bestbooks extends Component {
                                                     <p>{book.email}</p>
                                                 </Card.Text>
                                                  <Button variant="danger" onClick={() => this.handelDeleteBook(book._id)}>Delete Book</Button>
+                                                 <Button variant="danger" onClick={() => this.handelDisplayUpateModal(book)} >Update Book</Button>
                                             </Card.Body>
                                         </Card>
                                     </>
