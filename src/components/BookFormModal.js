@@ -25,10 +25,10 @@ export class AddBook extends Component {
                   <Form.Label>Status</Form.Label>
                   <Form.Control type="text" name="bookstatus" placeholder="Enter Book Status" />
                 </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
+                {/* <Form.Group className="mb-3"> */}
+                  {/* <Form.Label>Email</Form.Label>
                   <Form.Control type="text" name="useremail" placeholder="Enter Book Email" />
-                </Form.Group>
+                </Form.Group> */}
                 <Button variant="primary" type="submit">
                   Create New Book
                 </Button>
