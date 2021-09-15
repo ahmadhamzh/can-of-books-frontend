@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import AddBook from './BookFormModal';
 import UpdateModel from './UpdateFormModel'
-
+import { withAuth0 } from '@auth0/auth0-react';
 export class Bestbooks extends Component {
 
     constructor(props) {
@@ -24,7 +24,7 @@ export class Bestbooks extends Component {
             title: e.target.bookName.value,
             description: e.target.bookdescription.value,
             status: e.target.bookstatus.value,
-            email: e.target.useremail.value
+            email: this.props.auth0.user.email
         }
         axios.post(`${process.env.REACT_APP_API_URL}/books`, responseBody).then(createdbookobject => {
             this.state.booksData.push(createdbookobject.data);
@@ -92,7 +92,7 @@ export class Bestbooks extends Component {
     };
 
     componentDidMount = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/books`).then((booksResponse) => {
+        axios.get(`${process.env.REACT_APP_API_URL}/books?email=${this.props.auth0.user.email}`).then((booksResponse) => {
 
             this.setState({ booksData: booksResponse.data });
         }).catch(error => alert(error.message));
@@ -156,6 +156,6 @@ export class Bestbooks extends Component {
         )
     }
 }
-export default Bestbooks;
+export default withAuth0(Bestbooks);
 
 
